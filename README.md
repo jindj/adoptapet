@@ -6,6 +6,8 @@ API REST Node.js + Express pour gérer un refuge animaux, construite avec une ar
 
 - Node.js
 - Express
+- swagger-jsdoc
+- swagger-ui-express
 - CommonJS
 - Données en mémoire (aucune base de données)
 
@@ -25,6 +27,8 @@ npm start
 Serveur : `http://localhost:3000` (ou `PORT` via variable d'environnement)
 
 Préfixe API : `/api`
+
+Documentation Swagger UI : `http://localhost:3000/api-docs`
 
 ## Structure du projet
 

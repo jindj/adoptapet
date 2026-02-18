@@ -8,6 +8,15 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use('/api/animals', animalsRouter);
+
+try {
+  const swaggerUi = require('swagger-ui-express');
+  const openapiSpecification = require('./docs/openapi');
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
+} catch (error) {
+  console.warn('Swagger is not available yet. Run npm install to enable /api-docs.');
+}
+
 app.use(notFound);
 app.use(errorHandler);
 
