@@ -1,4 +1,6 @@
 const express = require('express');
+const sequelize = require('./config/database');
+const seedAnimalsIfEmpty = require('./bootstrap/seedAnimals');
 const animalsRouter = require('./routes/api/animals');
 const notFound = require('./middlewares/notFound');
 const errorHandler = require('./middlewares/errorHandler');
@@ -20,7 +22,18 @@ try {
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  // Message minimal utile uniquement au démarrage.
-  console.log(`API running on port ${PORT}`);
+async function startServer() {
+  await sequelize.authenticate();
+  await sequelize.sync();
+  await seedAnimalsIfEmpty();
+
+  app.listen(PORT, () => {
+    // Message minimal utile uniquement au démarrage.
+    console.log(`API running on port ${PORT}`);
+  });
+}
+
+startServer().catch((error) => {
+  console.error('Failed to start API:', error.message);
+  process.exit(1);
 });

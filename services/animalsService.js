@@ -1,4 +1,4 @@
-const animalsStore = require('../store/animalsStore');
+const animalsRepository = require('../repositories/animalsRepository');
 const ERROR_MESSAGES = require('../constants/errors');
 
 function createNotFoundError() {
@@ -7,27 +7,16 @@ function createNotFoundError() {
   return error;
 }
 
-function normalizeSpecies(species) {
-  return species.trim().toLowerCase();
+async function getAnimals(species) {
+  return animalsRepository.findAll(species);
 }
 
-function getAnimals(species) {
-  const animals = animalsStore.getAllAnimals();
-
-  if (!species) {
-    return animals;
-  }
-
-  const normalizedSpecies = normalizeSpecies(species);
-  return animals.filter((animal) => normalizeSpecies(animal.species) === normalizedSpecies);
+async function getAdoptedAnimals() {
+  return animalsRepository.findAdopted();
 }
 
-function getAdoptedAnimals() {
-  return animalsStore.getAllAnimals().filter((animal) => animal.adopted);
-}
-
-function getAnimalById(id) {
-  const animal = animalsStore.getAnimalById(id);
+async function getAnimalById(id) {
+  const animal = await animalsRepository.findById(id);
 
   if (!animal) {
     throw createNotFoundError();
@@ -36,8 +25,8 @@ function getAnimalById(id) {
   return animal;
 }
 
-function createAnimal(data) {
-  return animalsStore.createAnimal({
+async function createAnimal(data) {
+  return animalsRepository.create({
     name: data.name.trim(),
     species: data.species.trim(),
     age: data.age,
@@ -45,8 +34,8 @@ function createAnimal(data) {
   });
 }
 
-function updateAnimal(id, data) {
-  const updatedAnimal = animalsStore.updateAnimal(id, {
+async function updateAnimal(id, data) {
+  const updatedAnimal = await animalsRepository.updateById(id, {
     name: data.name.trim(),
     species: data.species.trim(),
     age: data.age,
@@ -60,14 +49,14 @@ function updateAnimal(id, data) {
   return updatedAnimal;
 }
 
-function adoptAnimal(id) {
-  const animal = animalsStore.getAnimalById(id);
+async function adoptAnimal(id) {
+  const animal = await animalsRepository.findById(id);
 
   if (!animal) {
     throw createNotFoundError();
   }
 
-  return animalsStore.updateAnimal(id, {
+  return animalsRepository.updateById(id, {
     name: animal.name,
     species: animal.species,
     age: animal.age,
@@ -75,8 +64,8 @@ function adoptAnimal(id) {
   });
 }
 
-function deleteAnimal(id) {
-  const isDeleted = animalsStore.deleteAnimal(id);
+async function deleteAnimal(id) {
+  const isDeleted = await animalsRepository.deleteById(id);
 
   if (!isDeleted) {
     throw createNotFoundError();

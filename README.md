@@ -6,15 +6,18 @@ API REST Node.js + Express pour gérer un refuge animaux, construite avec une ar
 
 - Node.js
 - Express
+- PostgreSQL
+- Sequelize
 - swagger-jsdoc
 - swagger-ui-express
 - CommonJS
-- Données en mémoire (aucune base de données)
+- Architecture en couches (routes/controllers/services/repositories/models)
 
 ## Lancement
 
 ```bash
 npm install
+cp .env.example .env
 npm run dev
 ```
 
@@ -30,6 +33,22 @@ Préfixe API : `/api`
 
 Documentation Swagger UI : `http://localhost:3000/api-docs`
 
+## Configuration base de données
+
+Variables d'environnement utilisées :
+
+- `DB_HOST`
+- `DB_PORT`
+- `DB_NAME`
+- `DB_USER`
+- `DB_PASSWORD`
+
+Au démarrage, l'application :
+
+- se connecte a PostgreSQL
+- synchronise le schema Sequelize (`sequelize.sync()`)
+- insere des donnees initiales si la table `animals` est vide
+
 ## Structure du projet
 
 ```text
@@ -37,6 +56,14 @@ Documentation Swagger UI : `http://localhost:3000/api-docs`
 ├── server.js
 ├── package.json
 ├── nodemon.json
+├── config
+│   └── database.js
+├── models
+│   └── Animal.js
+├── repositories
+│   └── animalsRepository.js
+├── bootstrap
+│   └── seedAnimals.js
 ├── routes
 │   └── api
 │       └── animals
@@ -53,8 +80,6 @@ Documentation Swagger UI : `http://localhost:3000/api-docs`
 │   └── animalsController.js
 ├── services
 │   └── animalsService.js
-├── store
-│   └── animalsStore.js
 ├── validators
 │   └── animalValidator.js
 ├── middlewares
@@ -174,7 +199,8 @@ Codes HTTP utilisés : `200`, `201`, `204`, `400`, `404`.
 - Routes sans logique métier.
 - Contrôleurs centrés sur la gestion requête/réponse.
 - Service dédié aux règles métier.
-- Store dédié à l'accès et la mutation des données mémoire.
+- Repository dédié à l'accès aux données via Sequelize.
+- Modèle `Animal` centralise la structure persistée en base.
 - Validation isolée dans les validateurs et middlewares.
 - Gestion centralisée des erreurs.
 - Messages d'erreur centralisés dans `constants/errors.js`.
