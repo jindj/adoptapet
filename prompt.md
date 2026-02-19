@@ -125,3 +125,13 @@ Sortie attendue :
 - Fournis le contenu complet de chaque fichier.
 - Respecte strictement l’architecture modulaire.
 - Aucune partie front.
+
+## Commits Git (du plus récent au plus ancien)
+
+- `2ed6b9d` chore: Update env.example file.
+- `96253ef` chore: Update Database to use env.
+- `109ab42` chore: setup dotenv and refresh env example
+- `12e3b19` refactor: migrer la persistance vers Sequelize + PostgreSQL
+- `57091c7` fix: add package-lock file.
+- `df7f038` feat: ajouter auto-doc OpenAPI via JSDoc
+- `cab428e` chore: initialiser l'API adoptapet
