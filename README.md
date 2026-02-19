@@ -6,6 +6,7 @@ API REST Node.js + Express pour gérer un refuge animaux, construite avec une ar
 
 - Node.js
 - Express
+- dotenv
 - PostgreSQL
 - Sequelize
 - swagger-jsdoc
